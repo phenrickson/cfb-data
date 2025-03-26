@@ -1,0 +1,16 @@
+ipython
+jupyterlab
+loguru
+matplotlib
+notebook
+numpy
+pandas
+pip
+pytest
+python-dotenv
+ruff
+scikit-learn
+tqdm
+typer
+cfbd
+-e .
