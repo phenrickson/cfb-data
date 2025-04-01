@@ -75,10 +75,39 @@ create_environment:
 #################################################################################
 
 
-## Make dataset
-.PHONY: data
-data: requirements
-	$(PYTHON_INTERPRETER) cfb_data/dataset.py
+## Set up BigQuery resources
+.PHONY: setup_bigquery
+setup_bigquery: requirements
+	$(PYTHON_INTERPRETER) -m cfb_data.dataset setup-bigquery-resources
+
+## Load data for a specific table
+.PHONY: load_table
+load_table: requirements
+	$(PYTHON_INTERPRETER) -m cfb_data.dataset load-table $(TABLE) $(ARGS)
+
+## Load historical data for a specific table
+.PHONY: load_historical
+load_historical: requirements
+	$(PYTHON_INTERPRETER) -m cfb_data.dataset load-historical-data $(TABLE) $(ARGS)
+
+## Load data for all tables
+.PHONY: load_all
+load_all: requirements
+	$(PYTHON_INTERPRETER) -m cfb_data.dataset load-all-tables $(ARGS)
+
+## Load historical data for all tables
+.PHONY: load_all_historical
+load_all_historical: requirements
+	$(PYTHON_INTERPRETER) -m cfb_data.dataset load-all-historical-data $(ARGS)
+
+## Update data for the current season
+.PHONY: update_current
+update_current: requirements
+	$(PYTHON_INTERPRETER) -m cfb_data.dataset update-current-season
+
+## Run the full ETL pipeline (setup BigQuery, load all historical data)
+.PHONY: full_pipeline
+full_pipeline: setup_bigquery load_all_historical
 
 
 #################################################################################

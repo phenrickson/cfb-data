@@ -13,4 +13,6 @@ scikit-learn
 tqdm
 typer
 cfbd
+google-cloud-bigquery
+google-cloud-storage
 -e .
