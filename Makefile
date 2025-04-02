@@ -16,9 +16,6 @@ PYTHON_INTERPRETER = python
 requirements:
 	$(PYTHON_INTERPRETER) -m pip install -U pip
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
-	
-
-
 
 ## Delete all compiled Python files
 .PHONY: clean
@@ -39,25 +36,20 @@ format:
 	ruff check --fix
 	ruff format
 
-
-
 ## Run tests
 .PHONY: test
 test:
-	python -m pytest tests
+	python -m pytest test
+
 ## Download Data from storage system
 .PHONY: sync_data_down
 sync_data_down:
 	gsutil -m rsync -r gs://cfb-data-py/data/ data/
-	
 
 ## Upload Data to storage system
 .PHONY: sync_data_up
 sync_data_up:
 	gsutil -m rsync -r data/ gs://cfb-data-py/data/
-	
-
-
 
 ## Set up Python interpreter environment
 .PHONY: create_environment

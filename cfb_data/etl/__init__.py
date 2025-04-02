@@ -1,18 +1,38 @@
 """ETL modules for loading data from the CFBD API to BigQuery."""
 
-from cfb_data.etl.generic import (
-    GenericETL,
-    create_etl_instances,
-    transform_games,
-    transform_teams,
-    transform_talent,
-    transform_plays,
-    transform_play_types,
-    transform_drives,
-    transform_conferences,
-    transform_venues,
-    transform_coaches,
-)
+from cfb_data.etl.games import GamesETL
+from cfb_data.etl.teams import TeamsETL, TeamsFbsETL, TeamTalentETL
+from cfb_data.etl.plays import PlaysETL, PlayTypesETL
+from cfb_data.etl.drives import DrivesETL
+from cfb_data.etl.conferences import ConferencesETL
+from cfb_data.etl.venues import VenuesETL
+from cfb_data.etl.coaches import CoachesETL
+from cfb_data.config import TABLES
+
+
+def create_etl_instances(api_client=None, bq_client=None):
+    """
+    Create ETL instances for all tables.
+    
+    Args:
+        api_client: The CFBD API client to use. If None, a new client will be created.
+        bq_client: The BigQuery client to use. If None, a new client will be created.
+        
+    Returns:
+        Dict mapping table names to ETL instances.
+    """
+    return {
+        TABLES["games"]: GamesETL(api_client, bq_client),
+        TABLES["teams"]: TeamsETL(api_client, bq_client),
+        TABLES["teams_fbs"]: TeamsFbsETL(api_client, bq_client),
+        TABLES["talent"]: TeamTalentETL(api_client, bq_client),
+        TABLES["plays"]: PlaysETL(api_client, bq_client),
+        TABLES["play_types"]: PlayTypesETL(api_client, bq_client),
+        TABLES["drives"]: DrivesETL(api_client, bq_client),
+        TABLES["conferences"]: ConferencesETL(api_client, bq_client),
+        TABLES["venues"]: VenuesETL(api_client, bq_client),
+        TABLES["coaches"]: CoachesETL(api_client, bq_client),
+    }
 
 # Create a function to run ETL for a specific table
 def run_etl_for_table(table_name, **kwargs):
